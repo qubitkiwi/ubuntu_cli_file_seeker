@@ -1,21 +1,23 @@
+# CC      := gcc
+CC      := clang
+CFLAGS  := -Wall -Wextra -g -Iinclude
+LDFLAGS :=
 
-a.out : main.o libmine.a
-	gcc -o a.out main.o libmine.a
+SRC_DIR := src
+BUILD_DIR := build
+TARGET := a.out
 
-main.o : common.h main.c
-	gcc -c -o main.o main.c
+SRCS := $(wildcard $(SRC_DIR)/*.c)
+OBJS := $(patsubst $(SRC_DIR)/%.c,$(BUILD_DIR)/%.o,$(SRCS))
 
-libmine.a : dir.o history.o kbhit.o
-	ar rs libmine.a dir.o history.o kbhit.o
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) -o $(TARGET) $(LDFLAGS)
 
-dir.o : common.h dir.c
-	gcc -c -o dir.o dir.c
-
-history.o : common.h history.c
-	gcc -c -o history.o history.c
-
-kbhit.o : common.h kbhit.c
-	gcc -c -o kbhit.o kbhit.c
+$(BUILD_DIR)/%.o: $(SRC_DIR)/%.c
+	mkdir -p $(BUILD_DIR)
+	$(CC) $(CFLAGS) -c $< -o $@
 
 clean:
-	rm *.o a.out
+	rm -rf $(BUILD_DIR) $(TARGET)
+
+.PHONY: clean
