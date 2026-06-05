@@ -1,24 +1,41 @@
-#include "common.h"
 #include <stdio.h>
 #include <termios.h>
 #include <fcntl.h>
-// #include <unistd.h>
 
-int kbhit(void)
+#include "kbhit.h"
+
+static struct termios oldt, newt;
+static int old_stdin_fd, new_stdin_fd;
+
+
+int kbhit_init()
 {
-	struct termios oldt, newt;
-	int ch, oldf;
-
+	// config terminal parameters
 	tcgetattr(0, &oldt);
 	newt = oldt;
 	newt.c_lflag &= ~(ICANON | ECHO);
 	tcsetattr(0, TCSANOW, &newt);
-	oldf = fcntl(0, F_GETFL, 0);
-	fcntl(0, F_SETFL, oldf | O_NONBLOCK);
-	ch = getchar();
 
+	// config stdin fd 
+	old_stdin_fd = fcntl(0, F_GETFL, 0);
+	fcntl(0, F_SETFL, old_stdin_fd | O_NONBLOCK);
+
+	return 0;
+}
+
+int kbhit_uninit()
+{
 	tcsetattr(0, TCSANOW, &oldt);
-	fcntl(0, F_SETFL, oldf);
+	fcntl(0, F_SETFL, old_stdin_fd);
+
+	return 0;
+}
+
+int kbhit(void)
+{
+	int ch;
+
+	ch = getchar();
 
 	if(ch != EOF) {
 		ungetc(ch, stdin);

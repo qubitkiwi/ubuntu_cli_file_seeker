@@ -11,8 +11,6 @@ struct file_info {
 };
 
 
-// kbhit.c
-int kbhit(void);
 
 // dir.c
 

@@ -3,6 +3,7 @@
 #include <unistd.h>     // getcwd()
 
 #include "common.h"
+#include "kbhit.h"
 
 int main() {
 
@@ -24,6 +25,8 @@ int main() {
         perror("history_update");
     }
 
+    kbhit_init();
+
     int select = 0;
     char b;
     while (1) {
@@ -39,6 +42,7 @@ int main() {
                 break;
 
                 case 'q':
+                    kbhit_uninit();
                     return 0;
                 break;
 
