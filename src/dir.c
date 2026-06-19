@@ -9,6 +9,8 @@
 #include <dirent.h>     // DIR
 #include <time.h>
 
+#include <ncurses.h>
+
 int file_update(char *file_path, struct file_info *files) {
 
     DIR *dp;                //디렉터리 조작을 위한 스트림
@@ -40,12 +42,12 @@ int file_update(char *file_path, struct file_info *files) {
 }
 
 int file_show(char *file_path, struct file_info *files) {
-    printf("%s\n", file_path);
-    printf("%-16s %-10s %15s %17s\n", "이름", "타입", "크기", "수정날짜");
+    printw("%s\n", file_path);
+    printw("%-16s %-10s %15s %17s\n", "이름", "타입", "크기", "수정날짜");
     for (int idx=0; strcmp(files[idx].name, "") != 0; idx++) {
-        printf("%-15s %-10s %10d %s\n",files[idx].name, files[idx].type, files[idx].size, files[idx].time);
+        printw("%-15s %-10s %10d %s\n",files[idx].name, files[idx].type, files[idx].size, files[idx].time);
     }
-    printf("========================================================\n");
+    printw("========================================================\n");
 }
 
 int is_dir(const char *file_name){

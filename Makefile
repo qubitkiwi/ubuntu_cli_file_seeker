@@ -1,7 +1,8 @@
 # CC      := gcc
 CC      := clang
-CFLAGS  := -Wall -Wextra -g -Iinclude
-LDFLAGS :=
+CFLAGS  := -Wall -Wextra -g -Iinclude  
+LDFLAGS := -lncursesw
+
 
 SRC_DIR := src
 BUILD_DIR := build
